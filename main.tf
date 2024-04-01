@@ -107,7 +107,3 @@ resource "azurerm_dns_a_record" "ordina-platforms_nl" {
   target_resource_id  = azurerm_public_ip.public-ip[count.index].id
 }
 
-resource "local_file" "ip_file" {
-  filename = "cursist-vm-inventory-${var.environment}.ini"
-  content  = join("\n", [for i in azurerm_linux_virtual_machine.vm : i.public_ip_address])
-}
