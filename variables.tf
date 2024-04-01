@@ -97,7 +97,7 @@ variable "dns_zone_rg" {
 }
 
 variable "workshop_name" {
-  description = "The name of the workshop"
+  description = "The name of the workshop, this will be used as a subdomain when making use of a dns zone"
   type        = string
   default     = "workshop"
 }
