@@ -48,10 +48,22 @@ variable "vnet_name" {
   default     = "workshop-vnet"
 }
 
+variable "vnet_address_space" {
+  description = "The address space for the VNet"
+  type        = list(string)
+  default     = ["10.42.0.0/16"]
+}
+
 variable "subnet_name" {
   description = "The name of the subnet to create"
   type        = string
   default     = "workshop-subnet"
+}
+
+variable "subnet_address_prefix" {
+  description = "The address prefix for the subnet"
+  type        = list(string)
+  default     = ["10.42.0.0/24"]
 }
 
 variable "nic_name_prefix" {
@@ -70,4 +82,46 @@ variable "create_dns_entries" {
   description = "Whether to create DNS entries for the VMs"
   type        = bool
   default     = false
+}
+
+variable "dns_zone_name" {
+  description = "The name of the DNS zone to use"
+  type        = string
+  default     = "Change this when setting create_dns_entries to true"
+}
+
+variable "dns_zone_rg" {
+  description = "The resource group in which the DNS zone is located"
+  type        = string
+  default     = "Change this when setting create_dns_entries to true"
+}
+
+variable "workshop_name" {
+  description = "The name of the workshop"
+  type        = string
+  default     = "workshop"
+}
+
+variable "use_ssh_key" {
+  description = "Whether to use SSH key for the VMs"
+  type        = bool
+  default     = false
+}
+
+variable "ssh_key_name" {
+  description = "The name of the SSH key to use"
+  type        = string
+  default     = "Change this when setting use_ssh_key to true"
+}
+
+variable "ssh_key_rg" {
+  description = "The resource group in which the SSH key is located"
+  type        = string
+  default     = "Change this when setting use_ssh_key to true"
+}
+
+variable "tags" {
+  description = "A mapping of tags to assign to the resources"
+  type        = map(string)
+  default     = {}
 }

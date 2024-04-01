@@ -12,46 +12,47 @@ provider "azurerm" {
 }
 
 data "azurerm_ssh_public_key" "ssh-key" {
-  name                = local.ssh_key_name
-  resource_group_name = local.ssh_key_rg
+  count               = var.use_ssh_key ? 1 : 0
+  name                = var.ssh_key_name
+  resource_group_name = var.ssh_key_rg
 }
 
-resource "azurerm_resource_group" "bash-workshop" {
+resource "azurerm_resource_group" "workshop-rg" {
   name     = var.resource_group_name
   location = var.location
-  tags     = local.tags
+  tags     = var.tags
 }
 
 resource "azurerm_virtual_network" "vnet" {
   name                = var.vnet_name
-  address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.bash-workshop.location
-  resource_group_name = azurerm_resource_group.bash-workshop.name
-  tags                = local.tags
+  address_space       = var.vnet_address_space
+  location            = azurerm_resource_group.workshop-rg.location
+  resource_group_name = azurerm_resource_group.workshop-rg.name
+  tags                = var.tags
 }
 
 resource "azurerm_subnet" "subnet" {
-  name                 = "internal"
-  resource_group_name  = azurerm_resource_group.bash-workshop.name
+  name                 = var.subnet_name
+  resource_group_name  = azurerm_resource_group.workshop-rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["10.0.2.0/24"]
+  address_prefixes     = var.subnet_address_prefix
 }
 
 resource "azurerm_public_ip" "public-ip" {
   count               = var.vm_count
   name                = "${var.public_ip_name_prefix}-${count.index}"
-  location            = azurerm_resource_group.bash-workshop.location
-  resource_group_name = azurerm_resource_group.bash-workshop.name
+  location            = azurerm_resource_group.workshop-rg.location
+  resource_group_name = azurerm_resource_group.workshop-rg.name
   allocation_method   = "Dynamic"
-  tags                = local.tags
+  tags                = var.tags
 }
 
 resource "azurerm_network_interface" "nic" {
   count               = var.vm_count
   name                = "${var.nic_name_prefix}-${count.index}"
-  location            = azurerm_resource_group.bash-workshop.location
-  resource_group_name = azurerm_resource_group.bash-workshop.name
-  tags                = local.tags
+  location            = azurerm_resource_group.workshop-rg.location
+  resource_group_name = azurerm_resource_group.workshop-rg.name
+  tags                = var.tags
 
   ip_configuration {
     name                          = "internal"
@@ -64,8 +65,8 @@ resource "azurerm_network_interface" "nic" {
 resource "azurerm_linux_virtual_machine" "vm" {
   count                           = var.vm_count
   name                            = "${var.vm_name_prefix}-${count.index}"
-  resource_group_name             = azurerm_resource_group.bash-workshop.name
-  location                        = azurerm_resource_group.bash-workshop.location
+  resource_group_name             = azurerm_resource_group.workshop-rg.name
+  location                        = azurerm_resource_group.workshop-rg.location
   size                            = var.vm_size
   admin_username                  = var.vm_username
   admin_password                  = var.vm_password
@@ -74,9 +75,12 @@ resource "azurerm_linux_virtual_machine" "vm" {
     azurerm_network_interface.nic[count.index].id,
   ]
 
-  admin_ssh_key {
-    username   = var.vm_username
-    public_key = data.azurerm_ssh_public_key.ssh-key.public_key
+  dynamic "admin_ssh_key" {
+    for_each = var.use_ssh_key ? [1] : []
+    content {
+      username   = var.vm_username
+      public_key = var.use_ssh_key ? data.azurerm_ssh_public_key.ssh-key[0].public_key : null
+    }
   }
 
   os_disk {
@@ -91,14 +95,14 @@ resource "azurerm_linux_virtual_machine" "vm" {
     version   = "latest"
   }
 
-  tags = local.tags
+  tags = var.tags
 }
 
 resource "azurerm_dns_a_record" "ordina-platforms_nl" {
   count               = var.create_dns_entries ? var.vm_count : 0
-  name                = "vm-${count.index}.bashworkshop"
-  zone_name           = local.dns_zone_name
-  resource_group_name = local.dns_zone_rg
+  name                = "vm-${count.index}.${var.workshop_name}"
+  zone_name           = var.dns_zone_name
+  resource_group_name = var.dns_zone_rg
   ttl                 = 300
   target_resource_id  = azurerm_public_ip.public-ip[count.index].id
 }
