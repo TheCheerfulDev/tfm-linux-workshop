@@ -32,6 +32,32 @@ resource "azurerm_subnet" "subnet" {
   address_prefixes     = var.subnet_address_prefix
 }
 
+resource "azurerm_network_security_group" "nsg" {
+  name                = "workshop-nsg"
+  location            = azurerm_resource_group.workshop-rg.location
+  resource_group_name = azurerm_resource_group.workshop-rg.name
+}
+
+resource "azurerm_network_security_rule" "nsg-rule" {
+  for_each                    = var.nsg_rules
+  name                        = each.key
+  priority                    = 100
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = each.value
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+  resource_group_name         = azurerm_resource_group.workshop-rg.name
+  network_security_group_name = azurerm_network_security_group.nsg.name
+}
+
+resource "azurerm_subnet_network_security_group_association" "nsg-association" {
+  subnet_id                 = azurerm_subnet.subnet.id
+  network_security_group_id = azurerm_network_security_group.nsg.id
+}
+
 resource "azurerm_public_ip" "public-ip" {
   count               = var.vm_count
   name                = "${var.public_ip_name_prefix}-${count.index}"

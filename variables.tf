@@ -125,3 +125,9 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "nsg_rules" {
+  description = "A mapping of security rules to apply to the NSG"
+  type        = map(string)
+  default     = { allow_ssh = "22" }
+}
