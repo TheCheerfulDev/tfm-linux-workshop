@@ -87,13 +87,13 @@ variable "create_dns_entries" {
 variable "dns_zone_name" {
   description = "The name of the DNS zone to use"
   type        = string
-  default     = "Change this when setting create_dns_entries to true"
+  default     = "change_me"
 }
 
 variable "dns_zone_rg" {
   description = "The resource group in which the DNS zone is located"
   type        = string
-  default     = "Change this when setting create_dns_entries to true"
+  default     = "change_me"
 }
 
 variable "workshop_name" {
@@ -111,13 +111,13 @@ variable "use_ssh_key" {
 variable "ssh_key_name" {
   description = "The name of the SSH key to use"
   type        = string
-  default     = "Change this when setting use_ssh_key to true"
+  default     = "change_me"
 }
 
 variable "ssh_key_rg" {
   description = "The resource group in which the SSH key is located"
   type        = string
-  default     = "Change this when setting use_ssh_key to true"
+  default     = "change_me"
 }
 
 variable "tags" {
