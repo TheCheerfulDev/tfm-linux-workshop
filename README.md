@@ -1,5 +1,21 @@
 # tfm-linux-workshop
 
+## Example Use
+
+The following example creates 2 VMs in resource group `bash-workshop-rg` located in the `West Europe` region with the
+password `P@ssw0rd1234`. By default SSH access is allowed on port 22, but no public key is provisioned.
+
+```hcl
+module "tmf-linux_workshop" {
+  source = "github.com/TheCheerfulDev/tfm-linux-workshop"
+
+  resource_group_name = "linux-workshop-rg"
+  vm_count            = 2
+  location            = "West Europe"
+  vm_password         = "P@ssw0rd1234"
+}
+```
+
 ## Variable Reference
 
 ### Required variables
@@ -8,7 +24,6 @@
 |-----------------------|-----------------------------------------------------------|--------|
 | `resource_group_name` | The resource group in which the resources will be created | string |
 | `vm_count`            | The number of VMs to create                               | number |
-| `environment`         | The environment to deploy the resources to                | string |
 | `location`            | The Azure region in which the resources will be created   | string |
 | `vm_password`         | The password for the VMs                                  | string |
 

@@ -8,11 +8,6 @@ variable "vm_count" {
   type        = number
 }
 
-variable "environment" {
-  description = "The environment to deploy the resources to"
-  type        = string
-}
-
 variable "location" {
   description = "The Azure region in which the resources will be created"
   type        = string
