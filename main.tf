@@ -39,14 +39,14 @@ resource "azurerm_network_security_group" "nsg" {
 }
 
 resource "azurerm_network_security_rule" "nsg-rule" {
-  for_each                    = var.nsg_rules
+  for_each                    = {for rule in var.nsg_rules : rule.name => rule}
   name                        = each.key
-  priority                    = 100
+  priority                    = each.value.priority
   direction                   = "Inbound"
   access                      = "Allow"
   protocol                    = "Tcp"
   source_port_range           = "*"
-  destination_port_range      = each.value
+  destination_port_range      = each.value.port_range
   source_address_prefix       = "*"
   destination_address_prefix  = "*"
   resource_group_name         = azurerm_resource_group.workshop-rg.name

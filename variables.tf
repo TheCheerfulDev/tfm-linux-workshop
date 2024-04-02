@@ -128,6 +128,6 @@ variable "tags" {
 
 variable "nsg_rules" {
   description = "A mapping of security rules to apply to the NSG"
-  type        = map(string)
-  default     = { allow_ssh = "22" }
+  type        = list(object({ name = string, priority = number, port_range = string }))
+  default     = [{ name = "allow_ssh", priority = 100, port_range = "22" }]
 }
