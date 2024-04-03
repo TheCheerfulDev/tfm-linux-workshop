@@ -7,7 +7,7 @@ password `P@ssw0rd1234`. By default, SSH access is allowed on port 22, but no pu
 
 ```hcl
 module "tmf-linux_workshop" {
-  source = "git::https://github.com/TheCheerfulDev/tfm-linux-workshop"
+  source = "git::https://github.com/TheCheerfulDev/tfm-linux-workshop.git"
 
   resource_group_name = "linux-workshop-rg"
   vm_count            = 2
