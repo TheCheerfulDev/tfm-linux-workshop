@@ -118,7 +118,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   tags = var.tags
 }
 
-resource "azurerm_dns_a_record" "ordina-platforms_nl" {
+resource "azurerm_dns_a_record" "dns" {
   count               = var.create_dns_entries ? var.vm_count : 0
   name                = "vm-${count.index}.${var.workshop_name}"
   zone_name           = var.dns_zone_name
