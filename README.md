@@ -2,7 +2,7 @@
 
 ## Example Use
 
-The following example creates 2 VMs in resource group `bash-workshop-rg` located in the `West Europe` region with the
+The following example creates 2 VMs in resource group `linux-workshop-rg` located in the `West Europe` region with the
 password `P@ssw0rd1234`. By default, SSH access is allowed on port 22, but no public key is provisioned.
 
 ```hcl
