@@ -82,13 +82,13 @@ variable "create_dns_entries" {
 variable "dns_zone_name" {
   description = "The name of the DNS zone to use"
   type        = string
-  default     = "change_me"
+  default     = ""
 }
 
 variable "dns_zone_rg" {
   description = "The resource group in which the DNS zone is located"
   type        = string
-  default     = "change_me"
+  default     = ""
 }
 
 variable "workshop_name" {
@@ -106,13 +106,13 @@ variable "use_ssh_key" {
 variable "ssh_key_name" {
   description = "The name of the SSH key to use"
   type        = string
-  default     = "change_me"
+  default     = ""
 }
 
 variable "ssh_key_rg" {
   description = "The resource group in which the SSH key is located"
   type        = string
-  default     = "change_me"
+  default     = ""
 }
 
 variable "tags" {
@@ -125,4 +125,10 @@ variable "nsg_rules" {
   description = "A mapping of security rules to apply to the NSG"
   type        = list(object({ name = string, priority = number, port_range = string }))
   default     = [{ name = "allow_ssh", priority = 100, port_range = "22" }]
+}
+
+variable "storage_account_type" {
+  description = "The type of storage account to use for the VM disks"
+  type        = string
+  default     = "Standard_LRS"
 }

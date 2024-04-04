@@ -1,16 +1,3 @@
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "3.97.1"
-    }
-  }
-}
-
-provider "azurerm" {
-  features {}
-}
-
 resource "azurerm_resource_group" "workshop-rg" {
   name     = var.resource_group_name
   location = var.location
@@ -105,7 +92,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
 
   os_disk {
     caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
+    storage_account_type = var.storage_account_type
   }
 
   source_image_reference {
@@ -126,4 +113,3 @@ resource "azurerm_dns_a_record" "dns" {
   ttl                 = 300
   target_resource_id  = azurerm_public_ip.public-ip[count.index].id
 }
-
