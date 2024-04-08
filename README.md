@@ -50,3 +50,10 @@ module "tmf-linux_workshop" {
 | `ssh_key_name`          | The name of the SSH key to use. This needs to be set if `use_ssh_key` is set to `true`                                            | string                                                                  | ""                                                         |
 | `ssh_key_rg`            | The resource group in which the SSH key is located. This needs to be set if `use_ssh_key` is set to `true`                        | string                                                                  | ""                                                         |
 | `tags`                  | A mapping of tags to assign to the resources                                                                                      | map(string)                                                             | {}                                                         |
+
+## Outputs
+
+| Output Name     | Description                       | Type          |
+|-----------------|-----------------------------------|---------------|
+| `vm_ids`        | The IDs of the created VMs        | Array(string) |
+| `vm_public_ips` | The public IPs of the created VMs | Array(string) |
